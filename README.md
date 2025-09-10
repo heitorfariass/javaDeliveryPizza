@@ -11,4 +11,4 @@ Sistema de restaurante focado em delivery de pizzas, com relatórios de vendas, 
 ## Instruções de execução:
 
 
-## Descrição
+## Descrição:
