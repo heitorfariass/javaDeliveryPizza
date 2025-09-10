@@ -108,31 +108,26 @@ class Pedido{
 }
 public class Main {
     public static void main(String[] args) {
-        // Criando um cliente
+
         Cliente cliente1 = new Cliente("João Silva", 5.0);
 
-        // Criando algumas pizzas
         Pizza pizza1 = new Pizza("Calabresa", "Grande", 45.0);
         Pizza pizza2 = new Pizza("Frango com Catupiry", "Média", 38.0);
 
-        // Criando um pedido
         Pedido pedido1 = new Pedido(1, cliente1);
         pedido1.adicionarPizza(pizza1);
         pedido1.adicionarPizza(pizza2);
 
-        // Exibindo informações do cliente
         System.out.println(cliente1.exibirDados());
 
-        // Exibindo as pizzas
         System.out.println(pizza1.exibirDados());
         System.out.println(pizza2.exibirDados());
 
-        // Exibindo informações do pedido
         System.out.println(pedido1.exibirDados());
-
-        // Cancelando o pedido
+        
         pedido1.cancelarPedido("Pedido demorou muito");
         System.out.println("\nApós cancelamento:");
         System.out.println(pedido1.exibirDados());
     }
+
 }
