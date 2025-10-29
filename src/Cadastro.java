@@ -21,6 +21,13 @@ public class Cadastro {
         }
 
         if (p.getStatus().equals("CANCELADO")){
+            sc.nextLine();
+            System.out.print("Motivo do cancelamento: ");
+            String motivo = sc.nextLine().trim();
+            if(motivo.length()==0){
+                motivo = "Não informado";
+            }
+            p.setMotivoCancelamento(motivo);
             p.setAvaliacao(0); p.setDistanciaKm(-1.0);
             pedidos.add(p);
             System.out.println("Pedido #" + p.getNumPedido() + " CANCELADO cadastrado.");
@@ -30,6 +37,7 @@ public class Cadastro {
         System.out.print("Distância (km) ou -1 para não informar: ");
         p.setDistanciaKm(sc.nextDouble());
 
+        p.setMotivoCancelamento("");
         System.out.print("Avaliação (1..5) ou 0: ");
         p.setAvaliacao(sc.nextInt());
 

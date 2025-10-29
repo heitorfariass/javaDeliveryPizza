@@ -7,6 +7,7 @@ public class Pedido{
     String status;
     int avaliacao;
     double distanciaKm;
+    String motivoCancelamento = "";
     ArrayList<ItemProduto> itens = new ArrayList<ItemProduto>();
 
     public Pedido (int numPedido){
@@ -41,6 +42,12 @@ public class Pedido{
     }
     public void setDistanciaKm(double d){
         distanciaKm=d;
+    }
+    public String getMotivoCancelamento(){
+        return motivoCancelamento;
+    }
+    public void setMotivoCancelamento(String motivo){
+        this.motivoCancelamento = motivo;
     }
     public ArrayList<ItemProduto> getItens(){
         return itens;
