@@ -25,4 +25,4 @@ oferencendo ferramentas para: gerenciar pedidos de pizzas, acompanhar relatório
 motivos de cancelamento, distâncias de entrega e satisfação dos clientes. 
 
 ## Diagrama UML:
-<img width="682" height="982" alt="Diagrama sem nome drawio" src="https://github.com/user-attachments/assets/e0608d12-ebae-4a7c-9f05-057bc2170b25" />
+<img width="1379" height="1159" alt="projeto2JavaPOO drawio" src="https://github.com/user-attachments/assets/bbe36480-8d8f-4f06-88ee-83cb51d38dee" />
