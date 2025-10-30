@@ -1,6 +1,6 @@
-# Pizzaria Delivery - Semana Vida Plena
-Projeto 1 da disciplina de Programação Orientada a Objetos.
-Sistema de restaurante focado em delivery de pizzas, com relatórios de vendas, cancelamentos e satisfação.
+# 🍕 Pizzaria & Eventos - Semana Vida Plena 
+Projeto da disciplina de Programação Orientada a Objetos.
+Sistema em terminal para gestão integrada de delivery de pizzas e eventos (agendamento, buffet e ingressos), com relatórios de desempenho.
 
 <img width="1024" height="1024" alt="logotipo" src="https://github.com/user-attachments/assets/1d481794-63a8-47b5-94d9-3d952653e93a" />
 
@@ -19,10 +19,13 @@ Para compilar e executar:
 3. Execute com:
    java -cp out javaDeliveryPizza.src.Main
 
-## Descrição:
-O sistema tem como objetivo facilitar a tomada de decisão da pizzaria,
-oferencendo ferramentas para: gerenciar pedidos de pizzas, acompanhar relatórios de vendas, 
-motivos de cancelamento, distâncias de entrega e satisfação dos clientes. 
+## 📌 Descrição:
+O sistema apoia a tomada de decisão do restaurante ao permitir:
+1. Gerenciar pedidos do delivery (itens, status, avaliação, distância, motivo de cancelamento)
+2. Administrar eventos (capacidade, público, preço de ingresso, buffet próprio)
+3. Gerar relatórios completos de delivery, eventos e visão integrada
+
+Tudo operando via menu em terminal, com fluxo separado para funcionários e proprietário (área restrita com senha).
 
 ## Diagrama UML:
 <img width="1379" height="1159" alt="projeto2JavaPOO drawio" src="https://github.com/user-attachments/assets/bbe36480-8d8f-4f06-88ee-83cb51d38dee" />
