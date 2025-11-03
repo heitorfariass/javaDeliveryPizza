@@ -1,13 +1,14 @@
-package javaDeliveryPizza.src;
+package javaDeliveryPizza;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 class HelpersMain{
 
     static String nomeProduto(Produto p){
-        if(p instanceof Pizza){ Pizza pi=(Pizza)p; return "Pizza "+pi.getSabor()+" ("+pi.getTamanho()+")"; }
-        if(p instanceof Bebida){ Bebida b=(Bebida)p; return "Bebida "+b.getNome()+" ("+b.getTamanho()+")"; }
-        return "Produto";
+        if(p==null){
+            return "Produto";
+        }
+        return p.descricao();
     }
 
     static void listar(ArrayList<Pedido> pedidos){
@@ -74,6 +75,8 @@ public class Main {
             System.out.println("3-Agendar evento");
             System.out.println("4-Listar eventos");
             System.out.println("5-Atualizar status de evento");
+            System.out.println("6-Remover pedido delivery");
+            System.out.println("7-Remover evento");
             System.out.println("0-Voltar");
             System.out.print("Escolha: ");
             op=sc.nextInt();
@@ -87,6 +90,32 @@ public class Main {
                 HelpersEventos.listar(eventos);
             } else if(op==5){
                 GestaoEventos.atualizarEvento(sc,eventos);
+            } else if(op==6){
+                if(pedidos.size()==0){
+                    System.out.println("Não há pedidos cadastrados.");
+                    continue;
+                }
+                HelpersMain.listar(pedidos);
+                System.out.print("Número do pedido para remover: ");
+                int numero = sc.nextInt();
+                if(Cadastro.removerPedido(pedidos, numero)){
+                    System.out.println("Pedido removido.");
+                }else{
+                    System.out.println("Pedido não encontrado.");
+                }
+            } else if(op==7){
+                if(eventos.size()==0){
+                    System.out.println("Não há eventos cadastrados.");
+                    continue;
+                }
+                HelpersEventos.listar(eventos);
+                System.out.print("ID do evento para remover: ");
+                int id = sc.nextInt();
+                if(GestaoEventos.removerEvento(eventos,id)){
+                    System.out.println("Evento removido.");
+                }else{
+                    System.out.println("Evento não encontrado.");
+                }
             } else if(op==0){
                 System.out.println("Retornando...");
             } else {
@@ -109,31 +138,31 @@ public class Main {
             op=sc.nextInt();
 
             if(op==1){
-                System.out.println("\nPergunta 1) Qual o ticket médio dos pedidos entregues no delivery?");
-                System.out.println("Resposta: R$ "+Helpers.arred2(Metricas.ticketMedio(pedidos)));
+                System.out.println("\nPergunta 1) Qual o ticket médio combinado entre pedidos entregues e buffets de eventos realizados?");
+                System.out.println("Resposta: R$ "+Helpers.arred2(MetricasIntegradas.ticketMedioIntegrado(pedidos, eventos)));
 
-                System.out.println("\nPergunta 2) Qual produto mais vendido em cada dia da semana?");
-                Metricas.maisVendidoPorDia(pedidos);
+                System.out.println("\nPergunta 2) Qual produto do restaurante (delivery + eventos) mais consumido em cada dia da semana?");
+                MetricasIntegradas.produtoMaisVendidoPorDiaIntegrado(pedidos, eventos);
 
-                System.out.println("\nPergunta 3) Quais os três sabores de pizza mais pedidos?");
-                Metricas.top3Sabores(pedidos);
+                System.out.println("\nPergunta 3) Quais os três sabores de pizza mais servidos somando delivery e eventos?");
+                MetricasIntegradas.topSaboresIntegrado(pedidos, eventos);
 
-                System.out.println("\nPergunta 4) Quantos pedidos foram cancelados e por qual motivo?");
-                Metricas.cancelados(pedidos);
+                System.out.println("\nPergunta 4) Em dias com eventos, quantos pedidos do delivery foram cancelados e quais motivos apareceram?");
+                MetricasIntegradas.cancelamentosEmDiasComEvento(pedidos, eventos);
 
-                System.out.println("\nPergunta 5) Qual a distância média das entregas e as estimativas de tempo e frete?");
-                Metricas.distanciaTempoFrete(pedidos);
+                System.out.println("\nPergunta 5) Qual a distância média das entregas realizadas em dias com evento e as estimativas de tempo/frete?");
+                MetricasIntegradas.distanciaEmDiasDeEvento(pedidos, eventos);
 
-                System.out.println("\nPergunta 6) Qual a satisfação média dos clientes do delivery?");
-                System.out.println("Resposta: "+Helpers.arred2(Metricas.satisfacao(pedidos))+" / 5");
+                System.out.println("\nPergunta 6) Qual a satisfação média combinada entre clientes do delivery e participantes dos eventos?");
+                System.out.println("Resposta: "+Helpers.arred2(MetricasIntegradas.satisfacaoIntegrada(pedidos, eventos))+" / 5");
             } else if(op==2){
                 MetricasEventos.resumo(eventos);
 
                 System.out.println("\nPergunta 7) Qual evento gerou a maior receita de buffet do restaurante?");
                 MetricasEventos.topBuffet(eventos);
 
-                System.out.println("\nPergunta 8) Qual é a taxa de ocupação dos eventos por dia da semana?");
-                MetricasEventos.ocupacaoPorDia(eventos);
+                System.out.println("\nPergunta 8) Como está a ocupação dos eventos e o volume de itens do restaurante (delivery + buffet) em cada dia da semana?");
+                MetricasIntegradas.ocupacaoEVolume(pedidos, eventos);
             } else if(op==3){
                 System.out.println("\nPergunta 9) Quanto o restaurante faturou ao combinar delivery e eventos?");
                 MetricasEventos.relatorioIntegrado(pedidos,eventos);

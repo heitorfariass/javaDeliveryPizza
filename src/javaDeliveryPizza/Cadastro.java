@@ -1,9 +1,16 @@
-package javaDeliveryPizza.src;
+package javaDeliveryPizza;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Cadastro {
     private static int nextId = 1;
+
+    public static void configurarProximoId(int proximo){
+        if(proximo <= 0){
+            proximo = 1;
+        }
+        nextId = proximo;
+    }
 
     public static void cadastrarPedido(Scanner sc, ArrayList<Pedido> pedidos){
         Pedido p = new Pedido(nextId); nextId++;
@@ -83,5 +90,15 @@ public class Cadastro {
         }
         pedidos.add(p);
         System.out.println("Pedido #"+p.getNumPedido()+" cadastrado com "+p.getItens().size()+" item(ns).");
+    }
+
+    public static boolean removerPedido(ArrayList<Pedido> pedidos, int numero){
+        for(int i=0;i<pedidos.size();i++){
+            if(pedidos.get(i).getNumPedido() == numero){
+                pedidos.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 }

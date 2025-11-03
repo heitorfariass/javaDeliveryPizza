@@ -1,4 +1,4 @@
-package javaDeliveryPizza.src;
+package javaDeliveryPizza;
 import java.util.ArrayList;
 
 public class Pedido{
