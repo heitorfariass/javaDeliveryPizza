@@ -1,6 +1,6 @@
-package javaDeliveryPizza.src;
+package javaDeliveryPizza;
 
-public class Produto {
+public abstract class Produto {
     double preco;
     String tamanho;
     public Produto (double preco, String tamanho){
@@ -18,6 +18,12 @@ public class Produto {
     }
     void setTamanho(String tamanho){
         this.tamanho = tamanho;
+    }
+
+    public abstract String nomeBase();
+
+    public String descricao(){
+        return nomeBase()+" ("+this.tamanho+")";
     }
 }
 class ItemProduto {

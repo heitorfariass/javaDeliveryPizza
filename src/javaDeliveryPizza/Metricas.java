@@ -1,4 +1,4 @@
-package javaDeliveryPizza.src;
+package javaDeliveryPizza;
 import java.util.ArrayList;
 
 class Helpers{
@@ -37,12 +37,22 @@ class Helpers{
     }
 
     public static double valorTotal(Pedido p){
-        double s=0; 
+        double s=0;
         for(int i=0; i<p.getItens().size(); i++){
             ItemProduto it=p.getItens().get(i);
             s+= it.getProduto().getPreco() * it.getQuantidade();
         }
         return s;
+    }
+
+    public static double totalBuffet(Evento evento){
+        double soma = 0.0;
+        ArrayList<ItemProduto> itens = evento.getBuffet();
+        for(int i=0;i<itens.size();i++){
+            ItemProduto it = itens.get(i);
+            soma += it.getProduto().getPreco() * it.getQuantidade();
+        }
+        return soma;
     }
 }
 
@@ -142,13 +152,40 @@ public class Metricas {
         }
     }
     public static void cancelados(ArrayList<Pedido> pedidos){
-        int qntd=0;
+        int total=0;
+        ArrayList<String> motivos = new ArrayList<String>();
+        ArrayList<Integer> contagem = new ArrayList<Integer>();
+
         for(int i=0;i<pedidos.size();i++){
-            if(pedidos.get(i).getStatus().equals("CANCELADO")){
-                qntd++;
+            Pedido p = pedidos.get(i);
+            if(p.getStatus().equals("CANCELADO")){
+                total++;
+                String motivo = p.getMotivoCancelamento();
+                if(motivo==null || motivo.trim().length()==0){
+                    motivo = "Não informado";
+                }
+                int idx = Helpers.indice(motivos, motivo);
+                if(idx==-1){
+                    motivos.add(motivo);
+                    contagem.add(1);
+                }else{
+                    contagem.set(idx, contagem.get(idx)+1);
+                }
             }
         }
-        System.out.println("\n--- Cancelamentos ---\nTotal: "+qntd);
+        System.out.println("\n--- Cancelamentos ---\nTotal: "+total);
+        if(total==0){
+            return;
+        }
+        System.out.println("Ranking de motivos:");
+        int pos = 1;
+        while(motivos.size()>0){
+            int idxMaior = Helpers.indiceMaior(contagem);
+            System.out.println(pos+") "+motivos.get(idxMaior)+" — "+contagem.get(idxMaior));
+            motivos.remove(idxMaior);
+            contagem.remove(idxMaior);
+            pos++;
+        }
     }
     public static void distanciaTempoFrete(ArrayList<Pedido> pedidos){
         double soma=0; int qt=0;

@@ -1,4 +1,4 @@
-package javaDeliveryPizza.src;
+package javaDeliveryPizza;
 public class Cliente{
     String nome;
     double distanciaKm;
