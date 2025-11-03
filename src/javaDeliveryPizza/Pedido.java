@@ -1,4 +1,5 @@
 package javaDeliveryPizza;
+
 import java.util.ArrayList;
 
 public class Pedido{
@@ -6,7 +7,6 @@ public class Pedido{
     int diaSemana;
     String status;
     int avaliacao;
-    double distanciaKm;
     String motivoCancelamento = "";
     ArrayList<ItemProduto> itens = new ArrayList<ItemProduto>();
 
@@ -36,12 +36,6 @@ public class Pedido{
     }
     public void setAvaliacao(int avaliacao){
         this.avaliacao=avaliacao;
-    }
-    public double getDistanciaKm(){
-        return distanciaKm;
-    }
-    public void setDistanciaKm(double d){
-        distanciaKm=d;
     }
     public String getMotivoCancelamento(){
         return motivoCancelamento;
