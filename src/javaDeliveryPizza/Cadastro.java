@@ -1,9 +1,16 @@
-package javaDeliveryPizza.src;
+package javaDeliveryPizza;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Cadastro {
     private static int nextId = 1;
+
+    public static void configurarProximoId(int proximo){
+        if(proximo <= 0){
+            proximo = 1;
+        }
+        nextId = proximo;
+    }
 
     public static void cadastrarPedido(Scanner sc, ArrayList<Pedido> pedidos){
         Pedido p = new Pedido(nextId); nextId++;
@@ -21,6 +28,13 @@ public class Cadastro {
         }
 
         if (p.getStatus().equals("CANCELADO")){
+            sc.nextLine();
+            System.out.print("Motivo do cancelamento: ");
+            String motivo = sc.nextLine().trim();
+            if(motivo.length()==0){
+                motivo = "Não informado";
+            }
+            p.setMotivoCancelamento(motivo);
             p.setAvaliacao(0); p.setDistanciaKm(-1.0);
             pedidos.add(p);
             System.out.println("Pedido #" + p.getNumPedido() + " CANCELADO cadastrado.");
@@ -30,6 +44,7 @@ public class Cadastro {
         System.out.print("Distância (km) ou -1 para não informar: ");
         p.setDistanciaKm(sc.nextDouble());
 
+        p.setMotivoCancelamento("");
         System.out.print("Avaliação (1..5) ou 0: ");
         p.setAvaliacao(sc.nextInt());
 
@@ -75,5 +90,15 @@ public class Cadastro {
         }
         pedidos.add(p);
         System.out.println("Pedido #"+p.getNumPedido()+" cadastrado com "+p.getItens().size()+" item(ns).");
+    }
+
+    public static boolean removerPedido(ArrayList<Pedido> pedidos, int numero){
+        for(int i=0;i<pedidos.size();i++){
+            if(pedidos.get(i).getNumPedido() == numero){
+                pedidos.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 }

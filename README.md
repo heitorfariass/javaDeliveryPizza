@@ -14,10 +14,11 @@ Sistema de restaurante focado em delivery de pizzas, com relatórios de vendas, 
 ## Instruções de execução:
 Para compilar e executar:
 1. Instale o Java 17 ou superior.
-2. Compile o projeto com:
-   javac src/Main.java
+2. Compile o projeto com (gera classes na pasta `out/`):
+   javac -d out src/javaDeliveryPizza/*.java
 3. Execute com:
-   java src/Main
+   java -cp out javaDeliveryPizza.Main
+4. No VS Code, certifique-se de que a classe principal configurada seja `javaDeliveryPizza.Main` (o atalho "Run Java" no arquivo `Main.java` já faz isso automaticamente).
 
 ## Descrição:
 O sistema tem como objetivo facilitar a tomada de decisão da pizzaria,
