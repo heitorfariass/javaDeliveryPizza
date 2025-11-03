@@ -14,8 +14,7 @@ Sistema em terminal para gestão integrada de delivery de pizzas e eventos (agen
 ## Instruções de execução:
 Para compilar e executar:
 1. Instale o Java 17 ou superior.
-2. Compile o projeto com (gera classes na pasta `out/`):
-<<<<<<< HEAD
+2. Compile o projeto com:
    javac -d out src/*.java
 3. Execute com:
    java -cp out javaDeliveryPizza.src.Main
