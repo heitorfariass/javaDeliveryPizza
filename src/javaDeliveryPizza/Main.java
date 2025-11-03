@@ -82,18 +82,14 @@ public class Main {
             op=EntradaDados.lerInteiro(sc);
             if(op==1){
                 Cadastro.registrarVenda(sc,pedidos);
-                PersistenciaJson.salvarDados(pedidos, eventos);
             } else if(op==2){
                 HelpersMain.listar(pedidos);
             } else if(op==3){
                 CadastroEventos.cadastrarEvento(sc,eventos);
-                PersistenciaJson.salvarDados(pedidos, eventos);
             } else if(op==4){
                 HelpersEventos.listar(eventos);
             } else if(op==5){
-                if(GestaoEventos.atualizarEvento(sc,eventos)){
-                    PersistenciaJson.salvarDados(pedidos, eventos);
-                }
+                GestaoEventos.atualizarEvento(sc,eventos);
             } else if(op==6){
                 if(pedidos.size()==0){
                     System.out.println("Não há vendas cadastradas.");
@@ -104,7 +100,6 @@ public class Main {
                 int numero = EntradaDados.lerInteiro(sc);
                 if(Cadastro.removerVenda(pedidos, numero)){
                     System.out.println("Venda removida.");
-                    PersistenciaJson.salvarDados(pedidos, eventos);
                 }else{
                     System.out.println("Venda não encontrada.");
                 }
@@ -118,7 +113,6 @@ public class Main {
                 int id = EntradaDados.lerInteiro(sc);
                 if(GestaoEventos.removerEvento(eventos,id)){
                     System.out.println("Evento removido.");
-                    PersistenciaJson.salvarDados(pedidos, eventos);
                 }else{
                     System.out.println("Evento não encontrado.");
                 }
@@ -176,7 +170,6 @@ public class Main {
                 menuFuncionario(sc,pedidos,eventos);
             } else if(op==0){
                 System.out.println("Encerrando...");
-                PersistenciaJson.salvarDados(pedidos, eventos);
             } else {
                 System.out.println("Opção inválida.");
             }
