@@ -1,4 +1,5 @@
 package javaDeliveryPizza;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -12,87 +13,78 @@ public class Cadastro {
         nextId = proximo;
     }
 
-    public static void cadastrarPedido(Scanner sc, ArrayList<Pedido> pedidos){
-        Pedido p = new Pedido(nextId); nextId++;
+    public static void registrarVenda(Scanner sc, ArrayList<Pedido> pedidos){
+        Pedido pedido = new Pedido(nextId);
+        nextId++;
 
-        System.out.println("\n--- Novo Pedido ---");
+        System.out.println("\n--- Nova venda do restaurante ---");
         System.out.print("Dia da semana (1=Seg..7=Dom): ");
-        p.setDiaDaSemana(sc.nextInt());
+        pedido.setDiaDaSemana(EntradaDados.lerInteiro(sc));
 
-        System.out.println("Status: 1-ENTREGUE  2-CANCELADO");
-        int s = sc.nextInt();
-        if (s==1){
-            p.setStatus("ENTREGUE");
-        }else{
-            p.setStatus("CANCELADO");
+        System.out.println("Status: 1-SERVIDO  2-CANCELADO");
+        int status = EntradaDados.lerInteiro(sc);
+        if(status == 1){
+            pedido.setStatus("SERVIDO");
+        } else {
+            pedido.setStatus("CANCELADO");
         }
 
-        if (p.getStatus().equals("CANCELADO")){
-            sc.nextLine();
+        if(pedido.getStatus().equals("CANCELADO")){
             System.out.print("Motivo do cancelamento: ");
-            String motivo = sc.nextLine().trim();
-            if(motivo.length()==0){
+            String motivo = EntradaDados.lerLinha(sc).trim();
+            if(motivo.length() == 0){
                 motivo = "Não informado";
             }
-            p.setMotivoCancelamento(motivo);
-            p.setAvaliacao(0); p.setDistanciaKm(-1.0);
-            pedidos.add(p);
-            System.out.println("Pedido #" + p.getNumPedido() + " CANCELADO cadastrado.");
+            pedido.setMotivoCancelamento(motivo);
+            pedido.setAvaliacao(0);
+            pedidos.add(pedido);
+            System.out.println("Venda #" + pedido.getNumPedido() + " CANCELADA registrada.");
             return;
         }
 
-        System.out.print("Distância (km) ou -1 para não informar: ");
-        p.setDistanciaKm(sc.nextDouble());
+        System.out.print("Avaliação (1..5) ou 0 para não informar: ");
+        pedido.setAvaliacao(EntradaDados.lerInteiro(sc));
 
-        p.setMotivoCancelamento("");
-        System.out.print("Avaliação (1..5) ou 0: ");
-        p.setAvaliacao(sc.nextInt());
+        int adicionar = 1;
+        while(adicionar == 1){
+            System.out.println("Item consumido: 1-PIZZA  2-BEBIDA");
+            int tipo = EntradaDados.lerInteiro(sc);
 
-        int loop=1;
-        while(loop==1){
-            System.out.println("Item: 1-PIZZA  2-BEBIDA");
-            int tipo=sc.nextInt();
-            if (tipo==1){
-                sc.nextLine();
-                System.out.print("Sabor da pizza : ");
-                String sabor=sc.nextLine();
+            if(tipo == 1){
+                System.out.print("Sabor da pizza: ");
+                String sabor = EntradaDados.lerLinha(sc);
                 System.out.print("Preço: ");
-                double preco=sc.nextDouble();
-                sc.nextLine();
+                double preco = EntradaDados.lerDouble(sc);
                 System.out.print("Tamanho [M/G]: ");
-                String t=sc.nextLine();
-                Pizza pi = new Pizza(sabor,t,preco);
+                String tamanho = EntradaDados.lerLinha(sc);
+                Pizza pizza = new Pizza(sabor, tamanho, preco);
                 System.out.print("Quantidade: ");
-                int q=sc.nextInt();
-                
-                p.addItem(new ItemProduto(pi,q));
-
-            } else if (tipo==2){
-                sc.nextLine();
+                int quantidade = EntradaDados.lerInteiro(sc);
+                pedido.addItem(new ItemProduto(pizza, quantidade));
+            } else if(tipo == 2){
                 System.out.print("Nome da bebida: ");
-                String nome=sc.nextLine();
+                String nome = EntradaDados.lerLinha(sc);
                 System.out.print("Preço: ");
-                double preco=sc.nextDouble();                
+                double preco = EntradaDados.lerDouble(sc);
                 System.out.print("Tamanho [Lata/1L]: ");
-                sc.nextLine();
-                String t=sc.nextLine();
-                Bebida b = new Bebida(nome,t,preco);
+                String tamanho = EntradaDados.lerLinha(sc);
+                Bebida bebida = new Bebida(nome, tamanho, preco);
                 System.out.print("Quantidade: ");
-                int q=sc.nextInt();
-
-                p.addItem(new ItemProduto(b,q));
-
+                int quantidade = EntradaDados.lerInteiro(sc);
+                pedido.addItem(new ItemProduto(bebida, quantidade));
             } else {
-                System.out.println("Tipo inválido.");
+                System.out.println("Opção inválida.");
             }
+
             System.out.print("Adicionar outro item? 1=sim 0=não: ");
-            loop=sc.nextInt();
+            adicionar = EntradaDados.lerInteiro(sc);
         }
-        pedidos.add(p);
-        System.out.println("Pedido #"+p.getNumPedido()+" cadastrado com "+p.getItens().size()+" item(ns).");
+
+        pedidos.add(pedido);
+        System.out.println("Venda #" + pedido.getNumPedido() + " registrada com " + pedido.getItens().size() + " item(ns).");
     }
 
-    public static boolean removerPedido(ArrayList<Pedido> pedidos, int numero){
+    public static boolean removerVenda(ArrayList<Pedido> pedidos, int numero){
         for(int i=0;i<pedidos.size();i++){
             if(pedidos.get(i).getNumPedido() == numero){
                 pedidos.remove(i);

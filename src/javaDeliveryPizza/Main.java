@@ -12,13 +12,14 @@ class HelpersMain{
     }
 
     static void listar(ArrayList<Pedido> pedidos){
-        System.out.println("\n--- Pedidos ---");
+        System.out.println("\n--- Vendas do restaurante ---");
         if(pedidos.size()==0){ System.out.println("(vazio)"); return; }
         for(int i=0;i<pedidos.size();i++){
             Pedido p=pedidos.get(i);
+            double valor = Helpers.arred2(Helpers.valorTotal(p));
             System.out.println("#"+p.getNumPedido()+" | Dia "+Helpers.nomeDia(p.getDiaSemana())+" | "+p.getStatus()+
-                " | Dist="+(p.getDistanciaKm()<0?"-":p.getDistanciaKm()+"km")+
-                " | Aval="+(p.getAvaliacao()==0?"-":(""+p.getAvaliacao())));
+                " | Aval="+(p.getAvaliacao()==0?"-":(""+p.getAvaliacao()))+
+                " | Total=R$ "+valor);
             if(p.getStatus().equals("CANCELADO")){
                 System.out.println("   Motivo: "+p.getMotivoCancelamento());
             }
@@ -56,8 +57,7 @@ class HelpersEventos{
 public class Main {
     private static boolean autenticarDono(Scanner sc){
         System.out.print("Senha do proprietário: ");
-        sc.nextLine();
-        String senha = sc.nextLine();
+        String senha = EntradaDados.lerLinha(sc);
         if(senha.equals("123oi")){
             System.out.println("Acesso liberado.");
             return true;
@@ -70,38 +70,43 @@ public class Main {
         int op=-1;
         while(op!=0){
             System.out.println("\n=== MENU FUNCIONÁRIO ===");
-            System.out.println("1-Cadastrar pedido delivery");
-            System.out.println("2-Listar pedidos delivery");
+            System.out.println("1-Registrar venda do restaurante");
+            System.out.println("2-Listar vendas do restaurante");
             System.out.println("3-Agendar evento");
             System.out.println("4-Listar eventos");
             System.out.println("5-Atualizar status de evento");
-            System.out.println("6-Remover pedido delivery");
+            System.out.println("6-Remover venda");
             System.out.println("7-Remover evento");
             System.out.println("0-Voltar");
             System.out.print("Escolha: ");
-            op=sc.nextInt();
+            op=EntradaDados.lerInteiro(sc);
             if(op==1){
-                Cadastro.cadastrarPedido(sc,pedidos);
+                Cadastro.registrarVenda(sc,pedidos);
+                PersistenciaJson.salvarDados(pedidos, eventos);
             } else if(op==2){
                 HelpersMain.listar(pedidos);
             } else if(op==3){
                 CadastroEventos.cadastrarEvento(sc,eventos);
+                PersistenciaJson.salvarDados(pedidos, eventos);
             } else if(op==4){
                 HelpersEventos.listar(eventos);
             } else if(op==5){
-                GestaoEventos.atualizarEvento(sc,eventos);
+                if(GestaoEventos.atualizarEvento(sc,eventos)){
+                    PersistenciaJson.salvarDados(pedidos, eventos);
+                }
             } else if(op==6){
                 if(pedidos.size()==0){
-                    System.out.println("Não há pedidos cadastrados.");
+                    System.out.println("Não há vendas cadastradas.");
                     continue;
                 }
                 HelpersMain.listar(pedidos);
-                System.out.print("Número do pedido para remover: ");
-                int numero = sc.nextInt();
-                if(Cadastro.removerPedido(pedidos, numero)){
-                    System.out.println("Pedido removido.");
+                System.out.print("Número da venda para remover: ");
+                int numero = EntradaDados.lerInteiro(sc);
+                if(Cadastro.removerVenda(pedidos, numero)){
+                    System.out.println("Venda removida.");
+                    PersistenciaJson.salvarDados(pedidos, eventos);
                 }else{
-                    System.out.println("Pedido não encontrado.");
+                    System.out.println("Venda não encontrada.");
                 }
             } else if(op==7){
                 if(eventos.size()==0){
@@ -110,9 +115,10 @@ public class Main {
                 }
                 HelpersEventos.listar(eventos);
                 System.out.print("ID do evento para remover: ");
-                int id = sc.nextInt();
+                int id = EntradaDados.lerInteiro(sc);
                 if(GestaoEventos.removerEvento(eventos,id)){
                     System.out.println("Evento removido.");
+                    PersistenciaJson.salvarDados(pedidos, eventos);
                 }else{
                     System.out.println("Evento não encontrado.");
                 }
@@ -128,47 +134,18 @@ public class Main {
         int op=-1;
         while(op!=0){
             System.out.println("\n=== MENU PROPRIETÁRIO ===");
-            System.out.println("1-Relatórios do delivery");
-            System.out.println("2-Relatórios de eventos");
-            System.out.println("3-Relatório integrado");
-            System.out.println("4-Listar pedidos");
-            System.out.println("5-Listar eventos");
+            System.out.println("1-Relatório completo");
+            System.out.println("2-Listar vendas");
+            System.out.println("3-Listar eventos");
             System.out.println("0-Voltar");
             System.out.print("Escolha: ");
-            op=sc.nextInt();
+            op=EntradaDados.lerInteiro(sc);
 
             if(op==1){
-                System.out.println("\nPergunta 1) Qual o ticket médio combinado entre pedidos entregues e buffets de eventos realizados?");
-                System.out.println("Resposta: R$ "+Helpers.arred2(MetricasIntegradas.ticketMedioIntegrado(pedidos, eventos)));
-
-                System.out.println("\nPergunta 2) Qual produto do restaurante (delivery + eventos) mais consumido em cada dia da semana?");
-                MetricasIntegradas.produtoMaisVendidoPorDiaIntegrado(pedidos, eventos);
-
-                System.out.println("\nPergunta 3) Quais os três sabores de pizza mais servidos somando delivery e eventos?");
-                MetricasIntegradas.topSaboresIntegrado(pedidos, eventos);
-
-                System.out.println("\nPergunta 4) Em dias com eventos, quantos pedidos do delivery foram cancelados e quais motivos apareceram?");
-                MetricasIntegradas.cancelamentosEmDiasComEvento(pedidos, eventos);
-
-                System.out.println("\nPergunta 5) Qual a distância média das entregas realizadas em dias com evento e as estimativas de tempo/frete?");
-                MetricasIntegradas.distanciaEmDiasDeEvento(pedidos, eventos);
-
-                System.out.println("\nPergunta 6) Qual a satisfação média combinada entre clientes do delivery e participantes dos eventos?");
-                System.out.println("Resposta: "+Helpers.arred2(MetricasIntegradas.satisfacaoIntegrada(pedidos, eventos))+" / 5");
+                Relatorios.exibirRelatorioCompleto(pedidos, eventos);
             } else if(op==2){
-                MetricasEventos.resumo(eventos);
-
-                System.out.println("\nPergunta 7) Qual evento gerou a maior receita de buffet do restaurante?");
-                MetricasEventos.topBuffet(eventos);
-
-                System.out.println("\nPergunta 8) Como está a ocupação dos eventos e o volume de itens do restaurante (delivery + buffet) em cada dia da semana?");
-                MetricasIntegradas.ocupacaoEVolume(pedidos, eventos);
-            } else if(op==3){
-                System.out.println("\nPergunta 9) Quanto o restaurante faturou ao combinar delivery e eventos?");
-                MetricasEventos.relatorioIntegrado(pedidos,eventos);
-            } else if(op==4){
                 HelpersMain.listar(pedidos);
-            } else if(op==5){
+            } else if(op==3){
                 HelpersEventos.listar(eventos);
             } else if(op==0){
                 System.out.println("Retornando...");
@@ -189,7 +166,7 @@ public class Main {
             System.out.println("2-Entrar como funcionário");
             System.out.println("0-Sair");
             System.out.print("Escolha: ");
-            op=sc.nextInt();
+            op=EntradaDados.lerInteiro(sc);
 
             if(op==1){
                 if(autenticarDono(sc)){
@@ -199,6 +176,7 @@ public class Main {
                 menuFuncionario(sc,pedidos,eventos);
             } else if(op==0){
                 System.out.println("Encerrando...");
+                PersistenciaJson.salvarDados(pedidos, eventos);
             } else {
                 System.out.println("Opção inválida.");
             }

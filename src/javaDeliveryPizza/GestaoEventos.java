@@ -22,7 +22,7 @@ public class GestaoEventos {
         }
 
         System.out.print("ID do evento: ");
-        int id = sc.nextInt();
+        int id = EntradaDados.lerInteiro(sc);
         Evento evento = buscarPorId(eventos, id);
         if(evento == null){
             System.out.println("Evento não encontrado.");
@@ -32,7 +32,7 @@ public class GestaoEventos {
         System.out.println("Status atual: " + evento.getStatus());
         System.out.println("1-AGENDADO  2-REALIZADO  3-CANCELADO");
         System.out.print("Novo status: ");
-        int st = sc.nextInt();
+        int st = EntradaDados.lerInteiro(sc);
 
         if(st == 1){
             evento.setStatus("AGENDADO");
@@ -42,7 +42,7 @@ public class GestaoEventos {
         } else if(st == 2){
             evento.setStatus("REALIZADO");
             System.out.print("Ingressos vendidos/público presente: ");
-            int publico = sc.nextInt();
+            int publico = EntradaDados.lerInteiro(sc);
             if(publico > evento.getCapacidade()){
                 publico = evento.getCapacidade();
             }
@@ -50,7 +50,7 @@ public class GestaoEventos {
             evento.setPublicoReal(publico);
 
             System.out.print("Avaliação (1..5) ou 0: ");
-            int avaliacao = sc.nextInt();
+            int avaliacao = EntradaDados.lerInteiro(sc);
             evento.setAvaliacao(avaliacao);
         } else if(st == 3){
             evento.setStatus("CANCELADO");

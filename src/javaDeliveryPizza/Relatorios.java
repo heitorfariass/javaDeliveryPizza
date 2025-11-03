@@ -1,20 +1,74 @@
 package javaDeliveryPizza;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class MetricasIntegradas {
+class Helpers{
+    public static String nomeDia(int d){
+        if(d==1) return"Seg";
+        if(d==2) return"Ter";
+        if(d==3) return"Qua";
+        if(d==4) return"Qui";
+        if(d==5) return"Sex";
+        if(d==6) return"Sab";
+        if(d==7) return"Dom";
+        return "?";
+    }
 
-    public static double ticketMedioIntegrado(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
+    public static double arred2(double v){
+        return Math.round(v*100.0)/100.0;
+    }
+
+    public static int indice (ArrayList<String> ls,String chave){
+        for(int i=0;i<ls.size();i++){
+            if(ls.get(i).equals(chave)){
+                return i;
+            }
+        }
+        return -1;
+    }
+    public static int indiceMaior(ArrayList<Integer> ls){
+        int k=0;
+        for(int i=1;i<ls.size();i++){
+            if(ls.get(i)>ls.get(k)){
+                k=i;
+            }
+        }
+        return k;
+
+    }
+
+    public static double valorTotal(Pedido p){
+        double s=0;
+        for(int i=0; i<p.getItens().size(); i++){
+            ItemProduto it=p.getItens().get(i);
+            s+= it.getProduto().getPreco() * it.getQuantidade();
+        }
+        return s;
+    }
+
+    public static double totalBuffet(Evento evento){
+        double soma = 0.0;
+        ArrayList<ItemProduto> itens = evento.getBuffet();
+        for(int i=0;i<itens.size();i++){
+            ItemProduto it = itens.get(i);
+            soma += it.getProduto().getPreco() * it.getQuantidade();
+        }
+        return soma;
+    }
+}
+
+public class Relatorios {
+
+    private static double ticketMedioIntegrado(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
         double soma = 0.0;
         int contagem = 0;
 
         for(int i=0;i<pedidos.size();i++){
             Pedido pedido = pedidos.get(i);
-            if(pedido.getStatus().equals("ENTREGUE")){
+            if("SERVIDO".equals(pedido.getStatus())){
                 soma += Helpers.valorTotal(pedido);
                 contagem++;
             }
@@ -22,7 +76,7 @@ public class MetricasIntegradas {
 
         for(int i=0;i<eventos.size();i++){
             Evento evento = eventos.get(i);
-            if(evento.getStatus().equals("REALIZADO")){
+            if("REALIZADO".equals(evento.getStatus())){
                 double valorBuffet = Helpers.totalBuffet(evento);
                 if(valorBuffet > 0){
                     soma += valorBuffet;
@@ -37,14 +91,14 @@ public class MetricasIntegradas {
         return soma / contagem;
     }
 
-    public static void produtoMaisVendidoPorDiaIntegrado(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
-        System.out.println("\n--- Produtos mais consumidos por dia (delivery + eventos) ---");
+    private static void produtoMaisConsumidoPorDia(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
+        System.out.println("\nPergunta 2) Qual produto do restaurante (salão + eventos) mais consumido em cada dia da semana?");
         for(int dia=1; dia<=7; dia++){
             Map<String, Integer> contagem = new HashMap<String, Integer>();
 
             for(int i=0;i<pedidos.size();i++){
                 Pedido pedido = pedidos.get(i);
-                if(pedido.getStatus().equals("ENTREGUE") && pedido.getDiaSemana() == dia){
+                if("SERVIDO".equals(pedido.getStatus()) && pedido.getDiaSemana() == dia){
                     for(int j=0;j<pedido.getItens().size();j++){
                         ItemProduto item = pedido.getItens().get(j);
                         String nome = item.getProduto().descricao();
@@ -55,7 +109,7 @@ public class MetricasIntegradas {
 
             for(int i=0;i<eventos.size();i++){
                 Evento evento = eventos.get(i);
-                if(evento.getDiaSemana() == dia && !evento.getStatus().equals("CANCELADO")){
+                if(evento.getDiaSemana() == dia && !"CANCELADO".equals(evento.getStatus())){
                     for(int j=0;j<evento.getBuffet().size();j++){
                         ItemProduto item = evento.getBuffet().get(j);
                         String nome = item.getProduto().descricao();
@@ -80,13 +134,13 @@ public class MetricasIntegradas {
         }
     }
 
-    public static void topSaboresIntegrado(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
-        System.out.println("\n--- Top 3 sabores de pizza (delivery + eventos) ---");
+    private static void topSabores(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
+        System.out.println("\nPergunta 3) Quais os três sabores de pizza mais servidos somando salão e eventos?");
         Map<String, Integer> contagem = new HashMap<String, Integer>();
 
         for(int i=0;i<pedidos.size();i++){
             Pedido pedido = pedidos.get(i);
-            if(pedido.getStatus().equals("ENTREGUE")){
+            if("SERVIDO".equals(pedido.getStatus())){
                 for(int j=0;j<pedido.getItens().size();j++){
                     ItemProduto item = pedido.getItens().get(j);
                     if(item.getProduto() instanceof Pizza){
@@ -100,7 +154,7 @@ public class MetricasIntegradas {
 
         for(int i=0;i<eventos.size();i++){
             Evento evento = eventos.get(i);
-            if(!evento.getStatus().equals("CANCELADO")){
+            if(!"CANCELADO".equals(evento.getStatus())){
                 for(int j=0;j<evento.getBuffet().size();j++){
                     ItemProduto item = evento.getBuffet().get(j);
                     if(item.getProduto() instanceof Pizza){
@@ -132,8 +186,8 @@ public class MetricasIntegradas {
         }
     }
 
-    public static void cancelamentosEmDiasComEvento(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
-        System.out.println("\n--- Cancelamentos de pedidos em dias com eventos ---");
+    private static void cancelamentosEmDiasComEvento(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
+        System.out.println("\nPergunta 4) Em dias com eventos, quantas vendas do salão foram canceladas e quais motivos apareceram?");
         Set<Integer> diasComEvento = new HashSet<Integer>();
         for(int i=0;i<eventos.size();i++){
             diasComEvento.add(eventos.get(i).getDiaSemana());
@@ -148,7 +202,7 @@ public class MetricasIntegradas {
 
         for(int i=0;i<pedidos.size();i++){
             Pedido pedido = pedidos.get(i);
-            if(pedido.getStatus().equals("CANCELADO") && diasComEvento.contains(pedido.getDiaSemana())){
+            if("CANCELADO".equals(pedido.getStatus()) && diasComEvento.contains(pedido.getDiaSemana())){
                 int dia = pedido.getDiaSemana();
                 totalPorDia.put(dia, totalPorDia.getOrDefault(dia, 0) + 1);
 
@@ -172,7 +226,7 @@ public class MetricasIntegradas {
             }
             int total = totalPorDia.getOrDefault(dia, 0);
             if(total == 0){
-                System.out.println(Helpers.nomeDia(dia) + ": eventos previstos, sem cancelamentos de pedidos.");
+                System.out.println(Helpers.nomeDia(dia) + ": eventos previstos, sem cancelamentos de vendas.");
             }else{
                 houveCancelamento = true;
                 System.out.println(Helpers.nomeDia(dia) + ": " + total + " cancelamento(s)");
@@ -197,58 +251,44 @@ public class MetricasIntegradas {
         }
 
         if(!houveCancelamento){
-            System.out.println("Não houve cancelamentos de pedidos nos dias com eventos.");
+            System.out.println("Não houve cancelamentos de vendas do restaurante nos dias com eventos.");
         }
     }
 
-    public static void distanciaEmDiasDeEvento(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
-        System.out.println("\n--- Distância média das entregas em dias com eventos ---");
+    private static void faturamentoRestauranteEmDiasDeEvento(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
+        System.out.println("\nPergunta 5) Qual foi o faturamento do salão nos dias em que houveram eventos?");
         Set<Integer> diasComEvento = new HashSet<Integer>();
-        int totalEventos = 0;
         for(int i=0;i<eventos.size();i++){
-            Evento evento = eventos.get(i);
-            int dia = evento.getDiaSemana();
-            diasComEvento.add(dia);
-            totalEventos++;
+            diasComEvento.add(eventos.get(i).getDiaSemana());
         }
-
         if(diasComEvento.size() == 0){
             System.out.println("Não há eventos cadastrados.");
             return;
         }
-
         double soma = 0.0;
         int contagem = 0;
         for(int i=0;i<pedidos.size();i++){
             Pedido pedido = pedidos.get(i);
-            if(pedido.getStatus().equals("ENTREGUE") && pedido.getDistanciaKm() >= 0 && diasComEvento.contains(pedido.getDiaSemana())){
-                soma += pedido.getDistanciaKm();
+            if("SERVIDO".equals(pedido.getStatus()) && diasComEvento.contains(pedido.getDiaSemana())){
+                soma += Helpers.valorTotal(pedido);
                 contagem++;
             }
         }
-
         if(contagem == 0){
-            System.out.println("Nenhuma entrega realizada nos dias em que há eventos.");
+            System.out.println("O salão não registrou vendas nos dias com eventos.");
             return;
         }
-
-        double mediaKm = soma / contagem;
-        double tempo = 5.0 * mediaKm;
-        double frete = 3 + (2.50 * mediaKm);
-        System.out.println("Entregas analisadas: " + contagem);
-        System.out.println("Eventos associados: " + totalEventos);
-        System.out.println("Distância média: " + Helpers.arred2(mediaKm) + " km");
-        System.out.println("Tempo médio (est.): " + Helpers.arred2(tempo) + " min");
-        System.out.println("Frete médio (est.): R$ " + Helpers.arred2(frete));
+        System.out.println("Total de vendas analisadas: " + contagem);
+        System.out.println("Faturamento acumulado no salão: R$ " + Helpers.arred2(soma));
     }
 
-    public static double satisfacaoIntegrada(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
+    private static double satisfacaoIntegrada(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
         int soma = 0;
         int contagem = 0;
 
         for(int i=0;i<pedidos.size();i++){
             Pedido pedido = pedidos.get(i);
-            if(pedido.getStatus().equals("ENTREGUE") && pedido.getAvaliacao() > 0){
+            if("SERVIDO".equals(pedido.getStatus()) && pedido.getAvaliacao() > 0){
                 soma += pedido.getAvaliacao();
                 contagem++;
             }
@@ -256,7 +296,7 @@ public class MetricasIntegradas {
 
         for(int i=0;i<eventos.size();i++){
             Evento evento = eventos.get(i);
-            if(evento.getStatus().equals("REALIZADO") && evento.getAvaliacao() > 0){
+            if("REALIZADO".equals(evento.getStatus()) && evento.getAvaliacao() > 0){
                 soma += evento.getAvaliacao();
                 contagem++;
             }
@@ -275,8 +315,36 @@ public class MetricasIntegradas {
         return media;
     }
 
-    public static void ocupacaoEVolume(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
-        System.out.println("\n--- Ocupação de eventos e volume de itens por dia ---");
+    private static void eventoMaiorBuffet(ArrayList<Evento> eventos){
+        System.out.println("\nPergunta 7) Qual evento gerou a maior receita de buffet do restaurante?");
+        if(eventos.size() == 0){
+            System.out.println("(nenhum evento)");
+            return;
+        }
+
+        double maiorValor = -1.0;
+        Evento destaque = null;
+        for(int i=0;i<eventos.size();i++){
+            Evento ev = eventos.get(i);
+            double valor = Helpers.totalBuffet(ev);
+            if(valor > maiorValor){
+                maiorValor = valor;
+                destaque = ev;
+            }
+        }
+
+        if(destaque == null || maiorValor <= 0){
+            System.out.println("Nenhum evento possui buffet do restaurante.");
+            return;
+        }
+
+        System.out.println("Evento #" + destaque.getId() + " - " + destaque.getNome());
+        System.out.println("Tipo: " + destaque.getTipo() + " | Dia: " + Helpers.nomeDia(destaque.getDiaSemana()));
+        System.out.println("Valor total do buffet: R$ " + Helpers.arred2(maiorValor));
+    }
+
+    private static void ocupacaoEVolume(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
+        System.out.println("\nPergunta 8) Como está a ocupação dos eventos e o volume de itens do restaurante por dia da semana?");
         for(int dia=1; dia<=7; dia++){
             int capacidade = 0;
             int publico = 0;
@@ -285,10 +353,10 @@ public class MetricasIntegradas {
 
             for(int i=0;i<eventos.size();i++){
                 Evento evento = eventos.get(i);
-                if(evento.getDiaSemana() == dia && !evento.getStatus().equals("CANCELADO")){
+                if(evento.getDiaSemana() == dia && !"CANCELADO".equals(evento.getStatus())){
                     qtEventos++;
                     capacidade += evento.getCapacidade();
-                    if(evento.getStatus().equals("REALIZADO")){
+                    if("REALIZADO".equals(evento.getStatus())){
                         publico += evento.getPublicoReal();
                     }
                     for(int j=0;j<evento.getBuffet().size();j++){
@@ -297,17 +365,17 @@ public class MetricasIntegradas {
                 }
             }
 
-            int itensDelivery = 0;
+            int itensSalao = 0;
             for(int i=0;i<pedidos.size();i++){
                 Pedido pedido = pedidos.get(i);
-                if(pedido.getStatus().equals("ENTREGUE") && pedido.getDiaSemana() == dia){
+                if("SERVIDO".equals(pedido.getStatus()) && pedido.getDiaSemana() == dia){
                     for(int j=0;j<pedido.getItens().size();j++){
-                        itensDelivery += pedido.getItens().get(j).getQuantidade();
+                        itensSalao += pedido.getItens().get(j).getQuantidade();
                     }
                 }
             }
 
-            int totalItens = itensBuffet + itensDelivery;
+            int totalItens = itensBuffet + itensSalao;
 
             if(qtEventos == 0 && totalItens == 0){
                 System.out.println(Helpers.nomeDia(dia) + ": —");
@@ -319,7 +387,51 @@ public class MetricasIntegradas {
                 ocupacao = ((double)publico / (double)capacidade) * 100.0;
             }
 
-            System.out.println(Helpers.nomeDia(dia) + ": " + qtEventos + " evento(s) | Ocupação " + Helpers.arred2(ocupacao) + "% | Itens do delivery: " + itensDelivery + " | Itens nos eventos: " + itensBuffet + " | Total de itens: " + totalItens);
+            System.out.println(Helpers.nomeDia(dia) + ": " + qtEventos + " evento(s) | Ocupação " + Helpers.arred2(ocupacao) + "% | Itens no salão: " + itensSalao + " | Itens nos eventos: " + itensBuffet + " | Total de itens: " + totalItens);
         }
+    }
+
+    private static void faturamentoTotal(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
+        System.out.println("\nPergunta 9) Quanto o restaurante faturou ao combinar salão e eventos?");
+        double receitaSalao = 0.0;
+        int vendasServidas = 0;
+
+        for(int i=0;i<pedidos.size();i++){
+            Pedido pedido = pedidos.get(i);
+            if("SERVIDO".equals(pedido.getStatus())){
+                receitaSalao += Helpers.valorTotal(pedido);
+                vendasServidas++;
+            }
+        }
+
+        double receitaEventos = 0.0;
+        for(int i=0;i<eventos.size();i++){
+            Evento ev = eventos.get(i);
+            receitaEventos += ev.receitaIngressos() + Helpers.totalBuffet(ev);
+        }
+
+        double receitaTotal = receitaSalao + receitaEventos;
+        System.out.println("Receita do salão: R$ " + Helpers.arred2(receitaSalao));
+        System.out.println("Vendas servidas: " + vendasServidas);
+        System.out.println("Receita dos eventos (ingressos + buffet): R$ " + Helpers.arred2(receitaEventos));
+        System.out.println("Faturamento consolidado: R$ " + Helpers.arred2(receitaTotal));
+    }
+
+    public static void exibirRelatorioCompleto(ArrayList<Pedido> pedidos, ArrayList<Evento> eventos){
+        System.out.println("\n=== RELATÓRIO COMPLETO ===");
+        System.out.println("Pergunta 1) Qual o ticket médio combinado entre vendas do salão e buffets de eventos realizados?");
+        System.out.println("Resposta: R$ " + Helpers.arred2(ticketMedioIntegrado(pedidos, eventos)));
+
+        produtoMaisConsumidoPorDia(pedidos, eventos);
+        topSabores(pedidos, eventos);
+        cancelamentosEmDiasComEvento(pedidos, eventos);
+        faturamentoRestauranteEmDiasDeEvento(pedidos, eventos);
+
+        System.out.println("\nPergunta 6) Qual a satisfação média combinada entre clientes do salão e participantes dos eventos?");
+        System.out.println("Resposta: " + Helpers.arred2(satisfacaoIntegrada(pedidos, eventos)) + " / 5");
+
+        eventoMaiorBuffet(eventos);
+        ocupacaoEVolume(pedidos, eventos);
+        faturamentoTotal(pedidos, eventos);
     }
 }
