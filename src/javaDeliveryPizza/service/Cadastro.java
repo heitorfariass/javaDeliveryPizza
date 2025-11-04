@@ -1,7 +1,13 @@
-package javaDeliveryPizza;
+package javaDeliveryPizza.service;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javaDeliveryPizza.domain.Bebida;
+import javaDeliveryPizza.domain.ItemProduto;
+import javaDeliveryPizza.domain.Pedido;
+import javaDeliveryPizza.domain.Pizza;
+import javaDeliveryPizza.util.EntradaDados;
 
 public class Cadastro {
     private static int nextId = 1;

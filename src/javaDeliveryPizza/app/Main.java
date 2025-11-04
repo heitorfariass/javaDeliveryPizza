@@ -1,58 +1,16 @@
-package javaDeliveryPizza;
+package javaDeliveryPizza.app;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
-class HelpersMain{
-
-    static String nomeProduto(Produto p){
-        if(p==null){
-            return "Produto";
-        }
-        return p.descricao();
-    }
-
-    static void listar(ArrayList<Pedido> pedidos){
-        System.out.println("\n--- Vendas do restaurante ---");
-        if(pedidos.size()==0){ System.out.println("(vazio)"); return; }
-        for(int i=0;i<pedidos.size();i++){
-            Pedido p=pedidos.get(i);
-            double valor = Helpers.arred2(Helpers.valorTotal(p));
-            System.out.println("#"+p.getNumPedido()+" | Dia "+Helpers.nomeDia(p.getDiaSemana())+" | "+p.getStatus()+
-                " | Aval="+(p.getAvaliacao()==0?"-":(""+p.getAvaliacao()))+
-                " | Total=R$ "+valor);
-            if(p.getStatus().equals("CANCELADO")){
-                System.out.println("   Motivo: "+p.getMotivoCancelamento());
-            }
-            for(int j=0;j<p.getItens().size();j++){
-                ItemProduto it=p.getItens().get(j);
-                System.out.println("   - "+nomeProduto(it.getProduto())+" x"+it.getQuantidade());
-            }
-        }
-    }
-}
-
-class HelpersEventos{
-    static void listar(ArrayList<Evento> eventos){
-        System.out.println("\n--- Eventos ---");
-        if(eventos.size()==0){ System.out.println("(vazio)"); return; }
-        for(int i=0;i<eventos.size();i++){
-            Evento ev = eventos.get(i);
-            double valorBuffet = Helpers.totalBuffet(ev);
-            System.out.println("#"+ev.getId()+" | "+ev.getNome()+" | "+ev.getTipo()+" | Dia "+Helpers.nomeDia(ev.getDiaSemana()));
-            System.out.println("   Status: "+ev.getStatus()+" | Capacidade: "+ev.getCapacidade()+" | Público: "+ev.getPublicoReal());
-            System.out.println("   Ingressos vendidos: "+ev.getIngressosVendidos()+" | Avaliação: "+(ev.getAvaliacao()==0?"-":ev.getAvaliacao()));
-            if(valorBuffet>0){
-                System.out.println("   Buffet (R$ "+Helpers.arred2(valorBuffet)+"): ");
-                for(int j=0;j<ev.getBuffet().size();j++){
-                    ItemProduto it = ev.getBuffet().get(j);
-                    System.out.println("      - "+HelpersMain.nomeProduto(it.getProduto())+" x"+it.getQuantidade());
-                }
-            } else {
-                System.out.println("   Buffet: —");
-            }
-        }
-    }
-}
+import javaDeliveryPizza.domain.Evento;
+import javaDeliveryPizza.domain.Pedido;
+import javaDeliveryPizza.service.Cadastro;
+import javaDeliveryPizza.service.CadastroEventos;
+import javaDeliveryPizza.service.GestaoEventos;
+import javaDeliveryPizza.service.Relatorios;
+import javaDeliveryPizza.util.EntradaDados;
+import javaDeliveryPizza.util.ListagemUtils;
 
 public class Main {
     private static boolean autenticarDono(Scanner sc){
@@ -83,11 +41,11 @@ public class Main {
             if(op==1){
                 Cadastro.registrarVenda(sc,pedidos);
             } else if(op==2){
-                HelpersMain.listar(pedidos);
+                ListagemUtils.listarPedidos(pedidos);
             } else if(op==3){
                 CadastroEventos.cadastrarEvento(sc,eventos);
             } else if(op==4){
-                HelpersEventos.listar(eventos);
+                ListagemUtils.listarEventos(eventos);
             } else if(op==5){
                 GestaoEventos.atualizarEvento(sc,eventos);
             } else if(op==6){
@@ -95,7 +53,7 @@ public class Main {
                     System.out.println("Não há vendas cadastradas.");
                     continue;
                 }
-                HelpersMain.listar(pedidos);
+                ListagemUtils.listarPedidos(pedidos);
                 System.out.print("Número da venda para remover: ");
                 int numero = EntradaDados.lerInteiro(sc);
                 if(Cadastro.removerVenda(pedidos, numero)){
@@ -108,7 +66,7 @@ public class Main {
                     System.out.println("Não há eventos cadastrados.");
                     continue;
                 }
-                HelpersEventos.listar(eventos);
+                ListagemUtils.listarEventos(eventos);
                 System.out.print("ID do evento para remover: ");
                 int id = EntradaDados.lerInteiro(sc);
                 if(GestaoEventos.removerEvento(eventos,id)){
@@ -138,9 +96,9 @@ public class Main {
             if(op==1){
                 Relatorios.exibirRelatorioCompleto(pedidos, eventos);
             } else if(op==2){
-                HelpersMain.listar(pedidos);
+                ListagemUtils.listarPedidos(pedidos);
             } else if(op==3){
-                HelpersEventos.listar(eventos);
+                ListagemUtils.listarEventos(eventos);
             } else if(op==0){
                 System.out.println("Retornando...");
             } else {

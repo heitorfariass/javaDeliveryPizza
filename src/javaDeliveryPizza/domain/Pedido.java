@@ -1,14 +1,15 @@
-package javaDeliveryPizza;
+package javaDeliveryPizza.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Pedido{
-    int numPedido;
-    int diaSemana;
-    String status;
-    int avaliacao;
-    String motivoCancelamento = "";
-    ArrayList<ItemProduto> itens = new ArrayList<ItemProduto>();
+    private int numPedido;
+    private int diaSemana;
+    private String status;
+    private int avaliacao;
+    private String motivoCancelamento = "";
+    private final List<ItemProduto> itens = new ArrayList<ItemProduto>();
 
     public Pedido (int numPedido){
         this.numPedido = numPedido;
@@ -43,7 +44,7 @@ public class Pedido{
     public void setMotivoCancelamento(String motivo){
         this.motivoCancelamento = motivo;
     }
-    public ArrayList<ItemProduto> getItens(){
+    public List<ItemProduto> getItens(){
         return itens;
     }
     public void addItem(ItemProduto it){
