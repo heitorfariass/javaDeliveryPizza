@@ -29,4 +29,3 @@ Tudo operando via menu em terminal, com fluxo separado para funcionários e prop
 - Heitor Farias: https://www.linkedin.com/in/heitorfariassantos/
 - Nina Lira
 - Matheus Souto
-- Dário Eduardo
