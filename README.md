@@ -26,6 +26,6 @@ Tudo operando via menu em terminal, com fluxo separado para funcionários e prop
 
 
 ## Integrantes:
-- Heitor Farias: https://www.linkedin.com/in/heitorfariassantos/
+- Heitor Farias: [LinkedIn](https://www.linkedin.com/in/heitorfariassantos/)
 - Nina Lira
 - Matheus Souto
