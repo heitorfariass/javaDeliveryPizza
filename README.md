@@ -31,6 +31,14 @@ Tudo operando via menu em terminal, com fluxo separado para funcionários e prop
 8. Qual é a receita combinada por dia da semana e como ela se divide entre salão e eventos?
 9. Quanto o restaurante faturou ao combinar salão e eventos?
 
+## Programa em execução:
+1. Algumas perguntas sendo respondidas:
+<img width="984" height="623" alt="image" src="https://github.com/user-attachments/assets/4cb2036f-ad47-4c4a-b0c4-935788a420a8" />
+
+2. Cadastro de evento:
+<img width="982" height="583" alt="image" src="https://github.com/user-attachments/assets/958f2197-3e65-4369-ba95-9fe5f9511dd6" />
+
+
 
 ## Diagrama UML:
 <img width="1373" height="1129" alt="projeto2JavaPOO_2 drawio (1)" src="https://github.com/user-attachments/assets/7cccd4bd-8dd4-4e07-8459-4d9f75faa906" />
