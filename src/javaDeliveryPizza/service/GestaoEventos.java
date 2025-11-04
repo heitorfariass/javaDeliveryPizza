@@ -1,7 +1,10 @@
-package javaDeliveryPizza;
+package javaDeliveryPizza.service;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javaDeliveryPizza.domain.Evento;
+import javaDeliveryPizza.util.EntradaDados;
 
 public class GestaoEventos {
 

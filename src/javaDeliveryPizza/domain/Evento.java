@@ -1,6 +1,7 @@
-package javaDeliveryPizza;
+package javaDeliveryPizza.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Evento {
     private int id;
@@ -12,7 +13,7 @@ public class Evento {
     private int publicoReal;
     private int ingressosVendidos;
     private double precoIngresso;
-    private ArrayList<ItemProduto> buffet;
+    private final List<ItemProduto> buffet;
     private int avaliacao;
 
     public Evento(int id){
@@ -116,7 +117,7 @@ public class Evento {
         this.avaliacao = avaliacao;
     }
 
-    public ArrayList<ItemProduto> getBuffet(){
+    public List<ItemProduto> getBuffet(){
         return buffet;
     }
 

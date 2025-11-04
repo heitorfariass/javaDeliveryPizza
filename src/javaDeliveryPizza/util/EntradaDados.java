@@ -1,4 +1,4 @@
-package javaDeliveryPizza;
+package javaDeliveryPizza.util;
 
 import java.util.Scanner;
 

@@ -1,13 +1,20 @@
-package javaDeliveryPizza;
+package javaDeliveryPizza.util;
+
 import java.util.ArrayList;
+
+import javaDeliveryPizza.domain.Bebida;
+import javaDeliveryPizza.domain.ItemProduto;
+import javaDeliveryPizza.domain.Pedido;
+import javaDeliveryPizza.domain.Pizza;
+import javaDeliveryPizza.domain.Produto;
 
 public class Procedimentos {
 
     public static double valorTotal(Pedido p) {
         double soma = 0.0;
-        for (int i = 0; i < p.itens.size(); i++) {
-            ItemProduto it = p.itens.get(i);
-            soma = soma + (it.produto.preco * it.quantidade);
+        for (int i = 0; i < p.getItens().size(); i++) {
+            ItemProduto it = p.getItens().get(i);
+            soma = soma + (it.getProduto().getPreco() * it.getQuantidade());
         }
         return soma;
     }
@@ -16,7 +23,7 @@ public class Procedimentos {
         for (int i = 0; i < lista.size(); i++){
             if (lista.get(i).equals(chave)){
                 return i;
-            } 
+            }
         }
         return -1;
     }
@@ -32,23 +39,16 @@ public class Procedimentos {
     }
 
     public static String nomeDia(int d) {
-        if (d == 1) return "Seg";
-        if (d == 2) return "Ter";
-        if (d == 3) return "Qua";
-        if (d == 4) return "Qui";
-        if (d == 5) return "Sex";
-        if (d == 6) return "Sab";
-        if (d == 7) return "Dom";
-        return "?";
+        return AnalyticsHelper.nomeDia(d);
     }
 
     public static String nomeProduto(Produto p) {
         if (p instanceof Pizza) {
             Pizza pizza = (Pizza) p;
-            return "Pizza " + pizza.sabor + " (" + pizza.tamanho + ")";
+            return "Pizza " + pizza.getSabor() + " (" + pizza.getTamanho() + ")";
         } else if (p instanceof Bebida) {
             Bebida b = (Bebida) p;
-            return "Bebida " + b.nome + " (" + b.tamanho + ")";
+            return "Bebida " + b.getNome() + " (" + b.getTamanho() + ")";
         }
         return "Produto";
     }
