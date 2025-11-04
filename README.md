@@ -2,7 +2,7 @@
 Projeto da disciplina de Programação Orientada a Objetos.
 Sistema em terminal para gestão integrada de delivery de pizzas e eventos (agendamento, buffet e ingressos), com relatórios de desempenho.
 
-<img width="1024" height="1024" alt="logotipo" src="https://github.com/user-attachments/assets/1d481794-63a8-47b5-94d9-3d952653e93a" />
+<img width="1024" height="1536" alt="e39b22cf-4bf8-4acb-986c-ce9ad0a883d7" src="https://github.com/user-attachments/assets/ac6ce5fd-d5a4-415f-8a03-639f0fd59e88" />
 
 ## Instruções de execução:
 Para compilar e executar:
