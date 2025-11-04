@@ -1,4 +1,4 @@
-<img width="1373" height="1129" alt="projeto2JavaPOO_2 drawio" src="https://github.com/user-attachments/assets/b539ea4a-2465-4267-a054-d0b1dfe1609d" /># 🍕 Pizzaria & Eventos - Semana Vida Plena 
+# 🍕 Pizzaria & Eventos - Semana Vida Plena 
 Projeto da disciplina de Programação Orientada a Objetos.
 Sistema em terminal para gestão integrada de delivery de pizzas e eventos (agendamento, buffet e ingressos), com relatórios de desempenho.
 
