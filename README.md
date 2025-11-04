@@ -13,7 +13,7 @@ Para compilar e executar:
    java -cp out javaDeliveryPizza.src.Main
 
 ## 📌 Descrição:
-O sistema apoia a tomada de decisão do restaurante ao permitir:
+O sistema apoia a tomada de decisão do restaurante (salão e espaço para eventos) ao permitir:
 1. Gerenciar pedidos do delivery (itens, status, avaliação, distância, motivo de cancelamento)
 2. Administrar eventos (capacidade, público, preço de ingresso, buffet próprio)
 3. Gerar relatórios completos de delivery, eventos e visão integrada
@@ -26,6 +26,6 @@ Tudo operando via menu em terminal, com fluxo separado para funcionários e prop
 
 
 ## Integrantes:
-- Heitor Farias: [LinkedIn](https://www.linkedin.com/in/heitorfariassantos/)
+- Heitor Farias - [LinkedIn](https://www.linkedin.com/in/heitorfariassantos/)
 - Nina Lira
 - Matheus Souto
