@@ -41,7 +41,7 @@ Tudo operando via menu em terminal, com fluxo separado para funcionários e prop
 
 
 ## Diagrama UML:
-<img width="1373" height="1129" alt="projeto2JavaPOO_2 drawio (1)" src="https://github.com/user-attachments/assets/7cccd4bd-8dd4-4e07-8459-4d9f75faa906" />
+<img width="2038" height="2065" alt="projetoPOO drawio (1)" src="https://github.com/user-attachments/assets/f0601c5f-9457-454e-bfdc-f221ba10f461" />
 
 ## 📦 Pacotes do código:
 - `javaDeliveryPizza.app`: ponto de entrada e fluxo de menus.
