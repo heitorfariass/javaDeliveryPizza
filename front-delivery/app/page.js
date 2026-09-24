@@ -21,7 +21,7 @@ export default function Home() {
         <h1>A melhor pizza</h1>
         
         <nav className={styles.actions} aria-label="Navegação principal">
-          <Link className={styles.primaryAction} href="/sobre">
+          <Link className={styles.primaryAction} href="/cardapio">
             Cardápio
           </Link>
           <Link className={styles.secondaryAction} href="/projetos">
