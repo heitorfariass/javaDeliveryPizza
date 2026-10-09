@@ -48,7 +48,3 @@ Tudo operando via menu em terminal, com fluxo separado para funcionários e prop
 - `javaDeliveryPizza.domain`: modelos de domínio (pedidos, produtos, eventos).
 - `javaDeliveryPizza.service`: regras de negócio, cadastros e relatórios.
 - `javaDeliveryPizza.util`: utilitários de entrada, cálculos e listagens.
-
-## Integrantes:
-- Heitor Farias - [LinkedIn](https://www.linkedin.com/in/heitorfariassantos/)
-- Nina Lira
